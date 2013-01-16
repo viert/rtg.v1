@@ -1,3 +1,15 @@
 RTG is for Real-Time Graphs
 
 It's a lightweight web service written in Go with API handler receiving data for graphs and another handler to view graphs with Highcharts.JS engine (See http://www.highcharts.com)
+
+Handlers description:
+
+UPDATE HANDLER:
+
+POST/GET /api/update/<hostname>/<graphname>/
+  field1=value1
+  field2=value2
+
+  OPTIONAL 
+  _ts=<timestamp> - timestamp of data arrived
+  _expire=<seconds> - data expiration time (this is graph-wide configuration, use this only once you want to change the value. default is 60 seconds)
