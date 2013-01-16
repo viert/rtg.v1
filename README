@@ -1,13 +1,16 @@
 RTG is for Real-Time Graphs
 
-It's a lightweight web service written in Go with API handler receiving data for graphs 
-and another handler to view graphs with Highcharts.JS engine (See http://www.highcharts.com)
-All the data received are kept in memory only, there is no persistent storage so the data 
-will be lost when daemon is restarted. So the service is usable for realtime monitoring when
-the monitored data updates often (once per second for example) and expires fast 
-(for example after 1 minute) to see the latest picture of the things that are happening 
-just right now - current server loadaverage, current memory usage, current sockets usage,
-software thread pools state and so forth.
+It's a lightweight web service written in Go with API handler receiving data for 
+graphs and another handler to view graphs with Highcharts.JS engine 
+(See http://www.highcharts.com)
+
+All the data received are kept in memory only, there is no persistent storage 
+so the data will be lost when daemon is restarted. So the service is usable for 
+realtime monitoring when the monitored data updates often (once per second 
+for example) and expires fast (for example after 1 minute) to see the latest 
+picture of the things that are happening just right now - current server 
+loadaverage, current memory usage, current sockets usage, software thread pools 
+state and so forth.
 
 Handlers description:
 
@@ -19,7 +22,9 @@ POST/GET /api/update/<hostname>/<graphname>/
 
   OPTIONAL 
   _ts=<timestamp> - timestamp of data arrived
-  _expire=<seconds> - data expiration time (this is graph-wide configuration, use this only once you want to change the value. default is 60 seconds)
+  _expire=<seconds> - data expiration time (this is graph-wide 
+                      configuration, use this only once you want 
+                      to change the value. default is 60 seconds)
 
 VIEW HANDLER:
 
