@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/highcharts.js"></script>
+		<script>
+      
+      var chart;
+      var offset = -(new Date()).getTimezoneOffset()*60;
+      var timestamp = 0 ;
+
+      var fieldNames = [
+      {{range .Fields}}'{{.}}',{{end}}
+      ];
+
+      function requestData() {
+        var url = window.location.href.split('/');
+        var host = url[url.length-3];
+        var graph = url[url.length-2];
+
+        url = "/api/data/" + host + "/" + graph + "/" + timestamp + "/data.json";
+
+        $.ajax({
+          url: url,
+          type: "GET",
+          dataType: "JSON",
+          success: function(data) {
+            $.each(fieldNames, function(k, v) {
+              $.each(data[v], function(i, item) {
+                var shift = false;
+                var datalength = chart.series[k].data.length;
+                if (datalength > 0) {
+                  shift = chart.series[k].data[0].x < (Date.now() - {{.DataLength}}*1000)+offset*1000; // shift after 1 minutes
+                }
+                dt = [(item.Timestamp+offset)*1000, item.Data];
+                chart.series[k].addPoint(dt, true, shift, false);
+                if (item.Timestamp > timestamp) { timestamp = item.Timestamp; }
+              });
+            });
+          },
+          cache: false,
+          complete: function() {
+            setTimeout(requestData, 1000);
+          }
+        });
+      }
+
+      $(function(){
+        chart = new Highcharts.Chart({
+          chart : {
+            renderTo: 'container',
+            defaultSeriesType: 'line',
+            events: {
+              load: requestData
+            } 
+          },
+          title: {
+            text: '{{.Hostname}} - {{.Graphname}}'
+          },
+          xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150,
+            maxZoom: {{.DataLength}}*1000,
+            tickLength: 20
+          },
+          yAxis: {
+            minPadding: 0.2,
+            maxPadding: 0.2,
+            title: {
+              text: 'value',
+              margin: 80
+            }
+          },
+          plotOptions: {
+            line: {
+              lineWidth : 1,
+              marker: { 
+                enabled: false,
+                states: {
+                  hover: {
+                    enabled: true,
+                    radius: 5
+                  }
+                }
+              }
+            }
+          },
+          series: [
+          {{range .Fields}}  { name: '{{.}}', data: [] }, 
+          {{end}}]
+
+        });
+
+      });
+
+
+
+		</script>
+	</head>
+	<body>
+		<div id="container"></div>
+	</body>
+</html>
+
