@@ -1,0 +1,3 @@
+RTG is for Real-Time Graphs
+
+It's a web service with API handler receiving data for graphs and another handler to view graphs with Highcharts.JS engine (See http://www.highcharts.com)
