@@ -13,3 +13,7 @@ POST/GET /api/update/<hostname>/<graphname>/
   OPTIONAL 
   _ts=<timestamp> - timestamp of data arrived
   _expire=<seconds> - data expiration time (this is graph-wide configuration, use this only once you want to change the value. default is 60 seconds)
+
+VIEW HANDLER:
+
+GET /graph/<hostname>/<graphname>/
